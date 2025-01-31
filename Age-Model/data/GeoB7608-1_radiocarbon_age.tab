@@ -1,0 +1,33 @@
+/* DATA DESCRIPTION:
+Citation:	Bahr, André (2007): Radiocarbon age of sediment core GeoB7608-1 [dataset]. PANGAEA, https://doi.org/10.1594/PANGAEA.667469, 
+	In supplement to: Bahr, André; Lamy, Frank; Arz, Helge Wolfgang; Major, C; Kwiecien, Ola; Wefer, Gerold (2008): Abrupt changes of temperature and water chemistry in the late Pleistocene and early Holocene Black Sea. Geochemistry, Geophysics, Geosystems, 9, Q01004, https://doi.org/10.1029/2007GC001683
+Project(s):	Center for Marine Environmental Sciences (MARUM) (URI: https://www.marum.de/en/)
+	Southern European Seas: Assessing and Modelling Ecosystem Changes (SESAME) (URI: https://cordis.europa.eu/project/id/36949)
+Funding:	Sixth Framework Programme (FP6), grant/award no. 36949: Southern European Seas: Assessing and Modelling Ecosystem Changes (URI: https://cordis.europa.eu/project/id/36949)
+Coverage:	LATITUDE: 43.486667 * LONGITUDE: 30.196667
+	DATE/TIME START: 2001-12-20T13:54:00 * DATE/TIME END: 2001-12-20T13:54:00
+	MINIMUM DEPTH, sediment/rock: 0.31 m * MAXIMUM DEPTH, sediment/rock: 6.52 m
+Event(s):	GeoB7608-1 (618) * LATITUDE: 43.486667 * LONGITUDE: 30.196667 * DATE/TIME: 2001-12-20T13:54:00 * ELEVATION: -1202.0 m * Recovery: 6.85 m * LOCATION: NW Black Sea * CAMPAIGN: M51/4 (URI: https://doi.org/10.2312/cr_m51) * BASIS: Meteor (1986) (URI: https://en.wikipedia.org/wiki/RV_Meteor_(1986)) * METHOD/DEVICE: Gravity corer (Kiel type) (SL) * COMMENT: GeoB
+Comment:	KIA 21460, KIA 21866, KIA 21459, KIA 21457: Dates were not used because of the adoption of the stratigraphy from MD04-2760 [Kwiecien et al., Radiocarbon, 50(1), 2008, 99-118] / KIA 21460: Sample was discarded because of its high amount of broken and probably reworked shells [Bahr et al., 2006, doi:10.1016/j.epsl.2005.10.036]
+Parameter(s):	DEPTH, sediment/rock [m] (Depth sed) * GEOCODE
+	Sample code/label (Sample label) * PI: Bahr, André (andre.bahr@geow.uni-heidelberg.de)
+	Age, dated [ka] (Age dated) * PI: Bahr, André (andre.bahr@geow.uni-heidelberg.de) * METHOD/DEVICE: Age, 14C AMS (URI: https://doi.org/10.1146/annurev.ns.30.120180.002253)
+	Age, dated [ka BP] (Age dated) * PI: Bahr, André (andre.bahr@geow.uni-heidelberg.de) * COMMENT: Age, tuned to MD04-2760 (yr BP)
+	Age, dated, error to older [ka +] (Age e +) * PI: Bahr, André (andre.bahr@geow.uni-heidelberg.de) * METHOD/DEVICE: Age, 14C AMS (URI: https://doi.org/10.1146/annurev.ns.30.120180.002253)
+	Age, dated, error to younger [ka -] (Age e -) * PI: Bahr, André (andre.bahr@geow.uni-heidelberg.de) * METHOD/DEVICE: Age, 14C AMS (URI: https://doi.org/10.1146/annurev.ns.30.120180.002253)
+	Calendar age [ka BP] (Cal age) * PI: Bahr, André (andre.bahr@geow.uni-heidelberg.de)
+	Calendar age, standard deviation [±] (Cal age std dev) * PI: Bahr, André (andre.bahr@geow.uni-heidelberg.de)
+	Comment (Comment) * PI: Bahr, André (andre.bahr@geow.uni-heidelberg.de)
+	Age, dated material (Dated material) * PI: Bahr, André (andre.bahr@geow.uni-heidelberg.de)
+License:	Creative Commons Attribution 3.0 Unported (CC-BY-3.0) (URI: https://creativecommons.org/licenses/by/3.0/)
+Size:	62 data points
+*/
+Depth sed [m]	Sample label	Age dated [ka]	Age dated [ka BP]	Age e + [ka +]	Age e - [ka -]	Cal age [ka BP]	Cal age std dev [±]	Comment	Dated material
+0.31						7.995			Unit II/III boundary [Lamy et al., 2006]
+0.34	KIA 21464	7.735		0.05	0.05	8.116	0.100	Calculated with 415 yrs reservoir correction	Ostracods
+0.88	KIA 21463	11.460		0.07	0.07	12.394	0.280	Calculated with 1000 yrs reservoir correction	Gastropod
+1.58	KIA 21461	13.350		0.08	0.08	14.240	0.345	Calculated with 1000 yrs reservoir correction	Gastropod
+2.43	KIA 21460	17.080	14.683	0.15	0.14	18.899	0.230	Calculated with 1450 yrs reservoir correction [Kwiecien et al., subm.]	Ostracods and bivalves
+4.36	KIA 21866	16.360	15.795	0.07	0.07	18.257	0.305	Calculated with 1450 yrs reservoir correction [Kwiecien et al., subm.]	Ostracods and bivalves
+5.96	KIA 21459	20.140	22.567	0.18	0.17	22.197	0.425	Calculated with 1450 yrs reservoir correction [Kwiecien et al., subm.]	Gastropod
+6.52	KIA 21457	24.970	24.928	0.31	0.30	28.488	0.485	Calculated with 1450 yrs reservoir correction [Kwiecien et al., subm.]	Mixed mollusc shells
