@@ -33,11 +33,11 @@ combined_plot <- ggplot() +
   scale_x_continuous(position = "top") +
   
   # Primary Y-Axis (Depth) -> Reversed
-  scale_y_reverse(name="Depth (cm)", limits=c(depth_max, depth_min),
+  scale_y_reverse(name="Depth (cm)", limits=c(depth_max, depth_min - 50 ),
                   sec.axis = sec_axis(~ (depth_max - .) / scale_factor, 
                                       name="Sedimentation Rate (m/ka)", 
-                                      breaks=seq(sed_rate_min, sed_rate_max, by=1), 
-                                      labels=seq(sed_rate_min, sed_rate_max, by=1))) +  # Fixed from 0 to 7
+                                      breaks=seq(sed_rate_min - 50, sed_rate_max, by=1), 
+                                      labels=seq(sed_rate_min - 50, sed_rate_max, by=1))) +  # Fixed from 0 to 7
   
   # Labels and themes
   labs(x="Age (a BP)", title="Downcore Age-Depth & Sedimentation Rate") +
@@ -46,7 +46,7 @@ combined_plot <- ggplot() +
     axis.text.x = element_text(size=12),  
     axis.text.y = element_text(size=12),
     panel.grid.major = element_line(color = "grey80", size = 0.5),
-    panel.grid.minor = element_line(color = "grey90", size = 0.3)
+    panel.grid.minor = element_line(color = "grey90", size = 0.3),
   )
 
 # Display the combined plot
