@@ -1,100 +1,53 @@
-# Load data and clean column names
-age_model_data <- read.delim(
-  "./data/GeoB7608-1_radiocarbon_age.tab",
-  header = TRUE,
-  skip = 24,  # Skip metadata lines
-  sep = "\t"
-)
-names(age_model_data) <- c(
-  "Depth_sed_m", "Sample_label", "Age_dated_ka", "Age_dated_ka_BP",
-  "Age_e_plus", "Age_e_minus", "Cal_age_ka_BP", "Cal_age_std_dev",
-  "Comment", "Dated_material"
-)
+# Load necessary libraries
+library(ggplot2)
+library(scales)  # For rescaling sedimentation rate
 
-# Remove rows with missing values and sort by depth
-age_model_data_clean <- age_model_data[
-  !is.na(age_model_data$Depth_sed_m) & 
-    !is.na(age_model_data$Cal_age_ka_BP),
-]
-age_model_data_clean <- age_model_data_clean[order(age_model_data_clean$Depth_sed_m), ]
+# Read the dataset
+data <- read.csv("./data/agemodel.csv", header=TRUE, sep=",")
 
-# Calculate sedimentation rate (Δdepth/Δage) for each interval
-start_age <- age_model_data_clean$Cal_age_ka_BP[-nrow(age_model_data_clean)]  # Start of interval
-end_age <- age_model_data_clean$Cal_age_ka_BP[-1]                             # End of interval
-depth_diff <- diff(age_model_data_clean$Depth_sed_m)
-age_diff <- diff(age_model_data_clean$Cal_age_ka_BP)
-sed_rate <- depth_diff / age_diff  # m/ka (positive values)
+# Define depth limits
+depth_min <- 0
+depth_max <- 700  # Fixed depth range
 
-# Create intervals for plotting (stepwise horizontal lines)
-sed_intervals <- data.frame(
-  start_age = start_age,
-  end_age = end_age,
-  sed_rate = sed_rate
-)
+# Define fixed sedimentation rate limits (0 to 7)
+sed_rate_min <- 0
+sed_rate_max <- 7
 
-# Set up two panels
-par(mfrow = c(2, 1), mar = c(4, 4, 2, 4))
+# Scale sedimentation rate for correct alignment with depth
+scale_factor <- depth_max / sed_rate_max  # Ensures sedimentation rate fits within 0-7
 
-# --------------------------------------
-# Panel 1: Depth vs. Age (Downcore Plot)
-# --------------------------------------
-plot(
-  age_model_data_clean$Cal_age_ka_BP,
-  age_model_data_clean$Depth_sed_m,
-  xlab = "Calibrated Age (ka BP)",
-  ylab = "Depth (m)",
-  main = "Downcore Age Profile",
-  pch = 19,
-  col = "blue",
-  type = "b",
-  ylim = rev(range(age_model_data_clean$Depth_sed_m))  # Invert y-axis
-)
+# Create the combined plot with shared x-axis
+combined_plot <- ggplot() +
+  
+  # Age-Depth Plot (Left Y-Axis: Reversed Depth)
+  geom_line(data=data, aes(x=age_new..a.BP., y=depth_new...cm.), color="black", size=1) +
+  geom_line(data=data, aes(x=age_old..a.BP., y=depth_old..cm.), color="darkgrey", linetype="dotted", size=1) +
+  geom_point(data=data, aes(x=age_new..a.BP., y=depth_new...cm.), color="black", size=1.5) +
+  geom_point(data=data, aes(x=age_old..a.BP., y=depth_old..cm.), color="darkgrey", size=1.5) +
+  
+  # Sedimentation Rate Plot (Right Y-Axis: Normal Scale)
+  geom_line(data=data, aes(x=age_new..a.BP..1, y=depth_max - (sed.rate_new..m.ka. * scale_factor)), color="blue", size=1) +
+  geom_line(data=data, aes(x=age_old..a.BP..1, y=depth_max - (sed.rate_old..m.ka. * scale_factor)), color="blue", linetype="dotted", size=1) +
+  
+  # X-Axis at the Top
+  scale_x_continuous(position = "top") +
+  
+  # Primary Y-Axis (Depth) -> Reversed
+  scale_y_reverse(name="Depth (cm)", limits=c(depth_max, depth_min),
+                  sec.axis = sec_axis(~ (depth_max - .) / scale_factor, 
+                                      name="Sedimentation Rate (m/ka)", 
+                                      breaks=seq(sed_rate_min, sed_rate_max, by=1), 
+                                      labels=seq(sed_rate_min, sed_rate_max, by=1))) +  # Fixed from 0 to 7
+  
+  # Labels and themes
+  labs(x="Age (a BP)", title="Downcore Age-Depth & Sedimentation Rate") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(size=12),  
+    axis.text.y = element_text(size=12),
+    panel.grid.major = element_line(color = "grey80", size = 0.5),
+    panel.grid.minor = element_line(color = "grey90", size = 0.3)
+  )
 
-# Add error bars for age uncertainty
-arrows(
-  x0 = age_model_data_clean$Cal_age_ka_BP - age_model_data_clean$Cal_age_std_dev,
-  y0 = age_model_data_clean$Depth_sed_m,
-  x1 = age_model_data_clean$Cal_age_ka_BP + age_model_data_clean$Cal_age_std_dev,
-  y1 = age_model_data_clean$Depth_sed_m,
-  angle = 90,
-  code = 3,
-  length = 0.05,
-  col = "gray"
-)
-
-# --------------------------------------
-# Panel 2: Stepwise Sedimentation Rate
-# --------------------------------------
-plot(
-  NA,  # Empty plot
-  xlim = range(age_model_data_clean$Cal_age_ka_BP),
-  ylim = c(0, max(sed_rate) * 1.1),  # Ensure y-axis starts at 0
-  xlab = "Calibrated Age (ka BP)",
-  ylab = "Sedimentation Rate (m/ka)",
-  main = "Stepwise Sedimentation Rate"
-)
-
-# Add horizontal segments for each interval
-segments(
-  x0 = sed_intervals$start_age,
-  y0 = sed_intervals$sed_rate,
-  x1 = sed_intervals$end_age,
-  y1 = sed_intervals$sed_rate,
-  col = "red",
-  lwd = 2
-)
-
-# Add vertical lines to emphasize intervals
-segments(
-  x0 = sed_intervals$start_age,
-  y0 = 0,
-  y1 = sed_intervals$sed_rate,
-  col = "red",
-  lty = "dashed"
-)
-
-# Add gridlines
-grid(nx = NA, ny = NULL, col = "lightgray", lty = "dotted")
-
-# Reset plot layout
-par(mfrow = c(1, 1))
+# Display the combined plot
+combined_plot
