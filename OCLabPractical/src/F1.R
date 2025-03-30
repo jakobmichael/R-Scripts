@@ -7,9 +7,9 @@ library(tidyr)
 
 # Import and prepare data
 df <- read_csv("data/BSc_Lab_Course_2025-02-26.csv", col_names = FALSE)
-f1_start <- which(df[,1] == "F1") + 2
-f1_columns <- df[f1_start, 2:8] |> as.character()
-f1_data <- df[(f1_start+1):(f1_start+3), 2:8]
+f1_start <- which(df[,1] == "F1") + 1
+f1_columns <- df[f1_start, 2:6] |> as.character()
+f1_data <- df[(f1_start+1):(f1_start+3), 2:6]
 
 # Set column names and convert to numeric
 colnames(f1_data) <- f1_columns
