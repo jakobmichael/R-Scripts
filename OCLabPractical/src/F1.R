@@ -8,8 +8,8 @@ library(tidyr)
 # Import and prepare data
 df <- read_csv("data/BSc_Lab_Course_2025-02-26.csv", col_names = FALSE)
 f1_start <- which(df[,1] == "F1") + 1
-f1_columns <- df[f1_start, 2:6] |> as.character()
-f1_data <- df[(f1_start+1):(f1_start+3), 2:6]
+f1_columns <- df[f1_start, 2:16] |> as.character()
+f1_data <- df[(f1_start+1):(f1_start+3), 2:16]
 
 # Set column names and convert to numeric
 colnames(f1_data) <- f1_columns
@@ -21,17 +21,17 @@ f1_long <- pivot_longer(f1_data, cols = -Sample, names_to = "Parameter", values_
   mutate(Parameter = factor(Parameter, levels = unique(Parameter)))
 
 # Calculate scale breaks
-max_value <- max(f1_long$Value, na.rm = TRUE)
-rounded_max <- ceiling(max_value / 100) * 100
-major_breaks <- c(0, 5, 10, 15, 20, 25, 50, 100, 150, 300, 1500, rounded_max)
+f1_max_value <- max(f1_long$Value, na.rm = TRUE)
+f1_rounded_max <- ceiling(f1_max_value / 100) * 100
+major_breaks <- c(0, 10, 20, 25, 100, 125, 500, 600, 900, 1200, f1_rounded_max)
 
 # Create minor lines (excluding those that match major breaks)
 minor_lines <- setdiff(
   c(seq(0, 20, by = 2),
-    seq(25, 50, by = 6),
-    seq(50, 100, by = 10),
-    seq(150, 300, by = 20),
-    seq(1500, rounded_max, by = 500)),
+    seq(25, 100, by = 25),
+    seq(125, 500, by = 75),
+    seq(600, 900, by = 100),
+    seq(1200, f1_rounded_max, by = 1000)),
   major_breaks
 )
 
@@ -45,8 +45,10 @@ ggplot(f1_long, aes(x = Parameter, y = Value, fill = Sample)) +
   
   # Add axis breaks
   scale_y_break(c(20, 25), scales = 0.3) +
-  scale_y_break(c(100, 150), scales = 0.3) +
-  scale_y_break(c(300, 1500), scales = 0.3) +
+  scale_y_break(c(100, 125), scales = 0.3) +
+  scale_y_break(c(500, 600), scales = 0.3) +
+  scale_y_break(c(900, 1200), scales = 0.3) +
+  #scale_y_break(c(1350, 1500), scales = 0.3) +
   
   # Set scales
   scale_y_continuous(breaks = major_breaks, expand = c(0, 0)) +
@@ -54,8 +56,8 @@ ggplot(f1_long, aes(x = Parameter, y = Value, fill = Sample)) +
   scale_fill_brewer(palette = "Set1") +
   
   # Theme and labels
-  labs(y = "concentration [ng/g]", x = "Parameter", 
-       title = "F1 analysis with triple-axis break") +
+  labs(y = "concentration [ng/g]", x = "biomarkers", 
+       title = "F1 Analysis") +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
@@ -65,3 +67,4 @@ ggplot(f1_long, aes(x = Parameter, y = Value, fill = Sample)) +
     legend.position = "top"
   ) +
   coord_cartesian(clip = "off")
+

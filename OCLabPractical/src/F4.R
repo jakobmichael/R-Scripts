@@ -33,17 +33,16 @@ f4_long <- pivot_longer(f4_data, cols = -Sample, names_to = "Parameter", values_
   mutate(Parameter = factor(Parameter, levels = unique(Parameter)))
 
 # Calculate scale breaks
-max_value <- max(f4_long$Value, na.rm = TRUE)
-rounded_max <- ceiling(max_value / 100) * 100
-major_breaks <- c(0, 5, 10, 15, 20, 25, 100, 150, 300, 1500, rounded_max)
+f4_max_value <- max(f4_long$Value, na.rm = TRUE)
+f4_rounded_max <- ceiling(f4_max_value / 100) * 100
+major_breaks <- c(0, 20, 40, 50, 300, 385, 685, 1000, 7000)
 
 # Create minor lines (excluding those that match major breaks)
 minor_lines <- setdiff(
-  c(seq(0, 20, by = 2),
-    seq(25, 50, by = 6),
-    seq(50, 100, by = 10),
-    seq(150, 300, by = 20),
-    seq(1500, rounded_max, by = 500)),
+  c(seq(0, 40, by = 5),
+    seq(50, 300, by = 50),
+    seq(385, 685, by = 75),
+    seq(1000, 7000, by = 1500)),
   major_breaks
 )
 
@@ -56,9 +55,9 @@ ggplot(f4_long, aes(x = Parameter, y = Value, fill = Sample)) +
   geom_col(position = position_dodge(width = 0.7), width = 0.6) +
   
   # Add axis breaks
-  scale_y_break(c(20, 25), scales = 0.3) +
-  scale_y_break(c(100, 150), scales = 0.3) +
-  scale_y_break(c(300, 1500), scales = 0.3) +
+  scale_y_break(c(40, 55), scales = 0.3) +
+  scale_y_break(c(300, 385), scales = 0.3) +
+  scale_y_break(c(685, 1000), scales = 0.3) +
   
   # Set scales
   scale_y_continuous(breaks = major_breaks, expand = c(0, 0)) +
@@ -66,8 +65,8 @@ ggplot(f4_long, aes(x = Parameter, y = Value, fill = Sample)) +
   scale_fill_brewer(palette = "Set1") +
   
   # Theme and labels
-  labs(y = "concentration [ng/g]", x = "Parameter", 
-       title = "f4 analysis with triple-axis break") +
+  labs(y = "concentration [ng/g]", x = "biomarkers", 
+       title = "F4 Analysis") +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
@@ -77,3 +76,4 @@ ggplot(f4_long, aes(x = Parameter, y = Value, fill = Sample)) +
     legend.position = "top"
   ) +
   coord_cartesian(clip = "off")
+

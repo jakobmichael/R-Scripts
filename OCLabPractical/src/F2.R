@@ -33,17 +33,15 @@ f2_long <- pivot_longer(f2_data, cols = -Sample, names_to = "Parameter", values_
   mutate(Parameter = factor(Parameter, levels = unique(Parameter)))
 
 # Calculate scale breaks
-max_value <- max(f2_long$Value, na.rm = TRUE)
-rounded_max <- ceiling(max_value / 100) * 100
-major_breaks <- c(0, 5, 10, 15, 20, 25, 100, 150, 300, 1500, rounded_max)
+f2_max_value <- max(f2_long$Value, na.rm = TRUE)
+f2_rounded_max <- ceiling(f2_max_value / 100) * 100
+major_breaks <- c(0, 50, 100, 125, 450, 1300, 5000, f2_rounded_max)
 
 # Create minor lines (excluding those that match major breaks)
 minor_lines <- setdiff(
-  c(seq(0, 20, by = 2),
-    seq(25, 50, by = 6),
-    seq(50, 100, by = 10),
-    seq(150, 300, by = 20),
-    seq(1500, rounded_max, by = 500)),
+  c(seq(0,125, by = 10),
+    seq(450, 1300, by = 170),
+    seq(5000, f2_rounded_max, by = 500)),
   major_breaks
 )
 
@@ -56,9 +54,9 @@ ggplot(f2_long, aes(x = Parameter, y = Value, fill = Sample)) +
   geom_col(position = position_dodge(width = 0.7), width = 0.6) +
   
   # Add axis breaks
-  scale_y_break(c(20, 25), scales = 0.3) +
-  scale_y_break(c(100, 150), scales = 0.3) +
-  scale_y_break(c(300, 1500), scales = 0.3) +
+  #scale_y_break(c(20, 25), scales = 0.3) +
+  scale_y_break(c(125, 450), scales = 0.3) +
+  scale_y_break(c(1300, 5000), scales = 0.3) +
   
   # Set scales
   scale_y_continuous(breaks = major_breaks, expand = c(0, 0)) +
@@ -66,8 +64,8 @@ ggplot(f2_long, aes(x = Parameter, y = Value, fill = Sample)) +
   scale_fill_brewer(palette = "Set1") +
   
   # Theme and labels
-  labs(y = "concentration [ng/g]", x = "Parameter", 
-       title = "F2 analysis with triple-axis break") +
+  labs(y = "concentration [ng/g]", x = "biomarkers", 
+       title = "F2 Analysis") +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
@@ -77,3 +75,4 @@ ggplot(f2_long, aes(x = Parameter, y = Value, fill = Sample)) +
     legend.position = "top"
   ) +
   coord_cartesian(clip = "off")
+

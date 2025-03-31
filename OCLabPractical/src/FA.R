@@ -33,15 +33,15 @@ fa_long <- pivot_longer(fa_data, cols = -Sample, names_to = "Parameter", values_
   mutate(Parameter = factor(Parameter, levels = unique(Parameter)))
 
 # Calculate scale breaks
-max_value <- max(fa_long$Value, na.rm = TRUE)
-rounded_max <- ceiling(max_value / 100) * 100
-major_breaks <- c(0, 5, 10, 15, 20, 90, 300, 800, rounded_max)
+fa_max_value <- max(fa_long$Value, na.rm = TRUE)
+fa_rounded_max <- ceiling(fa_max_value / 100) * 100
+major_breaks <- c(0, 250, 500, 750, 1000, 1350, 5350, 6500, 9500)
 
 # Create minor lines (excluding those that match major breaks)
 minor_lines <- setdiff(
-  c(seq(0, 20, by = 2),
-    seq(90, 300, by = 20),
-    seq(800, rounded_max, by = 500)),
+  c(seq(0, 1000, by = 50),
+    seq(1350, 5350, by = 800),
+    seq(6500, fa_rounded_max, by = 500)),
   major_breaks
 )
 
@@ -54,8 +54,8 @@ ggplot(fa_long, aes(x = Parameter, y = Value, fill = Sample)) +
   geom_col(position = position_dodge(width = 0.7), width = 0.6) +
   
   # Add axis breaks
-  scale_y_break(c(20, 90), scales = 0.3) +
-  scale_y_break(c(300, 1000), scales = 0.3) +
+  scale_y_break(c(1000, 1350), scales = 0.3) +
+  scale_y_break(c(5350, 6500), scales = 0.3) +
   
   # Set scales
   scale_y_continuous(breaks = major_breaks, expand = c(0, 0)) +
@@ -63,8 +63,8 @@ ggplot(fa_long, aes(x = Parameter, y = Value, fill = Sample)) +
   scale_fill_brewer(palette = "Set1") +
   
   # Theme and labels
-  labs(y = "concentration [ng/g]", x = "Parameter", 
-       title = "fa analysis with triple-axis break") +
+  labs(y = "concentration [ng/g]", x = "biomarkers", 
+       title = "FA Analysis") +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
@@ -74,3 +74,4 @@ ggplot(fa_long, aes(x = Parameter, y = Value, fill = Sample)) +
     legend.position = "top"
   ) +
   coord_cartesian(clip = "off")
+
